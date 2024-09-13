@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <style>
+    /* Style for loader */
+    #loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f8f9fa;
+      position: relative;
+      font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;    }
+
+    .loader-content {
+      text-align: center;
+      z-index: 1;
+    }
+
+    /* Hide main content initially */
+    #main-content {
+      display: none;
+    }
+
+    /* Quiz styles */
+    .quiz-container {
+      max-width: 400px;
+      margin: 40px auto;
+      text-align: center;
+    }
+
+    .quiz-question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .quiz-options {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .quiz-option {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .quiz-option:hover {
+      background-color: #f7f7f7;
+    }
+
+    .quiz-option.correct {
+      background-color: #c6f7d0;
+      border-color: #3e8e41;
+    }
+
+    .quiz-option.incorrect {
+      background-color: #f7cac9;
+      border-color: #e74c3c;
+    }
+
+    /* Character styles */
+    .character {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #fff;
+      margin: 20px auto;
+    }
+
+    .character.alex {
+      background-image: url('https://img.freepik.com/premium-photo/3d-young-business-man-wearing-black-suit-tie-with-happy-face-open-arms-warm-welcoming_848485-1555.jpg?w=740');
+      background-size: 100px 100px;
+    }
+
+    .character.alex-thinking {
+      animation: thinking 2s infinite;
+    }
+
+    @keyframes thinking {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Animation styles */
+    .animate-fade-in {
+      animation: fadeIn 4s;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .animate-scale-up {
+      animation: scaleUp 2s;
+    }
+
+    @keyframes scaleUp {
+      0% {
+        transform: scale(0.8);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader Section -->
+<!-- Loader Section -->
+<div id="loader">
+    <div class="quiz-container">
+      <h2 class="quiz-question">What is the main purpose of a loan?</h2>
+      <div class="character alex alex-thinking"></div>
+      <div class="quiz-options">
+        <button class="quiz-option" id="option-1">To invest in stocks</button>
+        <button class="quiz-option" id="option-2">To purchase a new car</button>
+        <button class="quiz-option" id="option-3">To cover unexpected expenses</button>
+        <button class="quiz-option" id="option-4">To travel around the world</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+  
+  <!-- Main Content Section -->
+  <div id="main-content">
+    <h1>Welcome to the Loan Website</h1>
+    <p>Your personalized loan options will appear here.</p>
+  </div>
+  
+  <!-- GSAP Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <!-- ... -->
+
+<script>
+    const quizData = [
+      {
+        question: "What is the main purpose of a loan?",
+        options: ["To invest in stocks", "To purchase a new car", "To cover unexpected expenses", "To travel around the world"],
+        correct: 2,
+        character: "alex"
+      },
+      {
+        question: "What is the most common type of loan?",
+        options: ["Personal loan", "Mortgage loan", "Car loan", "Student loan"],
+        correct: 1,
+        character: "alex"
+      },
+      {
+        question: "What is the benefit of having a good credit score?",
+        options: ["Lower interest rates", "Higher loan amounts", "Faster loan approval", "All of the above"],
+        correct: 3,
+        character: "alex"
+      }
+    ];
+  
+    let currentQuestion = 0;
+  
+    // Display the first question
+    displayQuestion();
+  
+    function displayQuestion() {
+      const quizQuestion = document.querySelector(".quiz-question");
+      const quizOptions = document.querySelectorAll(".quiz-option");
+      const character = document.querySelector(".character");
+      const quizFeedback = document.querySelector(".quiz-feedback");
+  
+      quizQuestion.textContent = quizData[currentQuestion].question;
+      quizOptions.forEach((option, index) => {
+        option.textContent = quizData[currentQuestion].options[index];
+      });
+      character.className = `character ${quizData[currentQuestion].character}`;
+    }
+  
+    // Add event listeners to the quiz options
+    document.querySelectorAll(".quiz-option").forEach(option => {
+      option.addEventListener("click", checkAnswer);
+    });
+  
+    function checkAnswer(event) {
+      const userAnswer = event.target.id;
+      const correctAnswer = quizData[currentQuestion].correct;
+      const quizFeedback = document.querySelector(".quiz-feedback");
+  
+      if (userAnswer === `option-${correctAnswer + 1}`) {
+        quizFeedback.textContent = "Correct!";
+        quizFeedback.style.color = "green";
+      } else {
+        quizFeedback.textContent = `Sorry, that's incorrect. The correct answer is ${quizData[currentQuestion].options[correctAnswer]}.`;
+        quizFeedback.style.color = "red";
+      }
+  
+      // Move to the next question after 1 second
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+          updateQuiz();
+        } else {
+          showFinalScore();
+        }
+      }, 1000);
+    }
+  
+    function updateQuiz() {
+      const quizQuestion = document.querySelector(".quiz-question");
+      const quizOptions = document.querySelectorAll(".quiz-option");
+      quizQuestion.textContent = quizData[currentQuestion].question;
+      quizOptions.forEach((option, index) => {
+        option.textContent = quizData[currentQuestion].options[index];
+        option.classList.remove("correct", "incorrect");
+      });
+    }
+  
+    function showFinalScore() {
+      // Calculate the final score
+      const finalScore = currentQuestion / quizData.length * 100;
+      const quizFeedback = document.querySelector(".quiz-feedback");
+  
+      quizFeedback.textContent = `You scored ${finalScore.toFixed(2)}%!`;
+      quizFeedback.style.color = "blue";
+  
+      // Trigger loader animation
+      const loader = document.getElementById("loader");
+      gsap.to(loader, { opacity: 0, duration: 0.8, onComplete: () => {
+        loader.style.display = 'none';
+        const mainContent = document.getElementById("main-content");
+        mainContent.style.display = 'block';
+  
+        // Animate main content entrance
+        gsap.from("#main-content h1", { y: -100, opacity: 0, duration: 0.8 });
+        gsap.from("#main-content p", { y: 100, opacity: 0, duration: 0.8, delay: 0.2 });
+      }});
+    }
+  
+    // Simulate API call (replace this with your actual API call)
+    setTimeout(fetchApiData, 3000);
+  
+    function fetchApiData() {
+      // Example of a fake API response
+      fetch("https://api.example.com/loan-options")
+        .then(response => response.json())
+        .then(data => {
+          // Animate loader exit with GSAP
+          const loader = document.getElementById("loader");
+          const mainContent = document.getElementById("main-content");
+          gsap.to(loader, { opacity: 0, duration: 0.8, onComplete: () => {
+            loader.style.display = 'none';
+            mainContent.style.display = 'block';
+  
+            // Animate main content entrance
+            gsap.from("#main-content h1", { y: -100, opacity: 0, duration: 0.8 });
+            gsap.from("#main-content p", { y: 100, opacity: 0, duration: 0.8, delay: 0.2 });
+          }});
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+  </script>
+
+</body>
+</html>
